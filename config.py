@@ -6,7 +6,9 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 def _normalize_db_url(url):
     if url and url.startswith("postgres://"):
-        url = url.replace("postgres://", "postgresql://", 1)
+        url = url.replace("postgres://", "postgresql+psycopg://", 1)
+    elif url and url.startswith("postgresql://"):
+        url = url.replace("postgresql://", "postgresql+psycopg://", 1)
     return url
 
 
