@@ -5,3 +5,4 @@ Flask-Cors==4.0.1
 Pillow==10.4.0
 itsdangerous==2.2.0
 Werkzeug==3.0.4
+gunicorn==22.0.0
