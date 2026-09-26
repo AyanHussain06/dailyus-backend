@@ -3,9 +3,20 @@ from datetime import timedelta
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
+
+def _normalize_db_url(url):
+    if url and url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql://", 1)
+    return url
+
+
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-change-in-production")
-    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(BASE_DIR, "instance", "dailyus.db")
+
+    _database_url = _normalize_db_url(os.environ.get("DATABASE_URL"))
+    SQLALCHEMY_DATABASE_URI = _database_url or (
+        "sqlite:///" + os.path.join(BASE_DIR, "instance", "dailyus.db")
+    )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "dev-jwt-secret-change-in-production")
@@ -17,5 +28,4 @@ class Config:
 
     ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 
-    # How long a signed photo-access token stays valid (seconds)
     SIGNED_URL_EXPIRY = 300  # 5 minutes
